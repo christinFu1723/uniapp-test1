@@ -1,0 +1,13 @@
+<template>
+  <div class="row">
+    <text class="a-start font">￥</text>
+    <text class="font-md a-center"><slot /></text>
+  </div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style src="@/common/zcm-main-nvue.css"></style>
+<style></style>

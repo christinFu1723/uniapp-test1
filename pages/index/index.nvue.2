@@ -1,0 +1,122 @@
+<template>
+  <div>
+    <list :show-scrollbar="false">
+      <cell>
+        <sum-slider :swipers="swipers" />
+        <sum-index-navs :resdata="indexNav"></sum-index-navs>
+        <divider />
+        <sum-three-adv :item="data" />
+        <divider />
+        <sum-one-adv :item="oneAdv" />
+        <sum-list class="pt-2" :list="list" />
+      </cell>
+    </list>
+  </div>
+</template>
+
+<script>
+import sumSlider from '@/components/index/components/sum-slider.nvue';
+import sumIndexNavs from '@/components/index/components/sum-index-navs.nvue';
+import divider from '@/components/index/components/divider.nvue';
+import sumThreeAdv from '@/components/index/components/sum-three-adv.nvue';
+import sumOneAdv from '@/components/index/components/sum-one-adv.nvue';
+import sumList from '@/components/index/components/sum-list.nvue';
+const currentWebview = plus.webview.currentWebview();
+export default {
+  components: {
+    sumSlider,
+    sumIndexNavs,
+    divider,
+    sumThreeAdv,
+    sumOneAdv,
+    sumList
+  },
+  data() {
+    return {
+      swipers: [
+        {
+          src: '../../static/images/demo/demo4.jpg'
+        },
+        {
+          src: '../../static/images/demo/demo3.jpg'
+        }
+      ],
+      indexNav: [
+        {
+          src: '../../static/images/indexnav/1.png',
+          name: '新品分类'
+        },
+        {
+          src: '../../static/images/indexnav/2.gif',
+          name: '新品分类'
+        },
+        {
+          src: '../../static/images/indexnav/3.gif',
+          name: '新品分类'
+        },
+        {
+          src: '../../static/images/indexnav/4.gif',
+          name: '新品分类'
+        },
+        {
+          src: '../../static/images/indexnav/5.gif',
+          name: '新品分类'
+        }
+      ],
+      data: [
+        {
+          src: '/static/images/demo/demo1.jpg'
+        },
+        {
+          src: '/static/images/demo/demo2.jpg'
+        },
+        {
+          src: '/static/images/demo/demo3.jpg'
+        }
+      ],
+      oneAdv: {
+        title: '每日精选',
+        cover: '../../static/images/demo/demo4.jpg'
+      },
+      list: [
+        {
+          cover: '../../static/images/demo/list/1.jpg',
+          title: '米家空调',
+          desc: '1.5匹变频',
+          price1: '23322',
+          price2: '1199'
+        },
+        {
+          cover: '../../static/images/demo/list/1.jpg',
+          title: '米家空调',
+          desc: '1.5匹变频',
+          price1: '23322',
+          price2: '1199'
+        },
+        {
+          cover: '../../static/images/demo/list/1.jpg',
+          title: '米家空调',
+          desc: '1.5匹变频',
+          price1: '23322',
+          price2: '1199'
+        }
+      ]
+    };
+  },
+  onShow() {
+    console.log('查看nvue生命周期');
+  },
+  created() {
+    currentWebview.addEventListener('show', e => {
+      console.log('indexShow');
+    });
+  },
+  beforeDestroy() {
+    // 移除监听事件
+    currentWebview.removeEventListener('show', e => {});
+  }
+};
+</script>
+
+<style src="@/common/zcm-main-nvue.css"></style>
+<style></style>

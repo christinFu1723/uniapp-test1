@@ -1,0 +1,214 @@
+<template>
+  <div style="display: flex;flex-direction: column;">
+    <sum-tabbar :tabBar="tabBar" :tabBarIndex="tabBarIndex" @change="handleTabbarChange" />
+    <slider class="flex-1 w-100" :index="tabBarIndex" :infinite="false" @change="sliderChange">
+      <div v-for="(item1, index1) in tabBar" :key="index1" class="w-100">
+        <list :show-scrollbar="false" :loadmoreoffset="1">
+          <refresh
+            style="height: 80px;text-align: center;"
+            class="w-100 flex-row a-center j-center"
+            :display="refreshing ? 'show' : 'hide'"
+            @refresh="handleRefresh"
+            @pullingdown="onpullingdown"
+          >
+            <text class="font-md text-muted">{{ refreshText }}</text>
+          </refresh>
+          <cell>
+            <sum-slider :swipers="swipers" />
+            <sum-index-navs :resdata="indexNav"></sum-index-navs>
+            <divider />
+            <sum-three-adv :item="data" />
+            <divider />
+            <sum-one-adv :item="oneAdv" />
+            <sum-list class="pt-2" :list="list" />
+          </cell>
+          <loading @loading="onLoading" :display="loadingShow" class="w-100 flex-row a-center j-center">
+            <text  class="font-md text-center text-muted ">Loading...</text>
+          </loading>
+        </list>
+      </div>
+    </slider>
+  </div>
+</template>
+
+<script>
+import sumTabbar from '@/components/index/components/sum-tabbar.nvue';
+import sumSlider from '@/components/index/components/sum-slider.nvue';
+import sumIndexNavs from '@/components/index/components/sum-index-navs.nvue';
+import divider from '@/components/index/components/divider.nvue';
+import sumThreeAdv from '@/components/index/components/sum-three-adv.nvue';
+import sumOneAdv from '@/components/index/components/sum-one-adv.nvue';
+import sumList from '@/components/index/components/sum-list.nvue';
+export default {
+  components: { sumSlider, sumTabbar, sumIndexNavs, divider, sumThreeAdv, sumOneAdv, sumList },
+  data() {
+    return {
+      refreshing: false,
+      refreshText: '下拉可以刷新',
+      loadingShow: 'hide',
+      tabBar: [
+        {
+          name: '推荐'
+        },
+        {
+          name: '体育'
+        },
+        {
+          name: '热点'
+        },
+        {
+          name: '新闻'
+        },
+        {
+          name: '娱乐'
+        },
+        {
+          name: '推荐1'
+        },
+        {
+          name: '体育1'
+        },
+        {
+          name: '热点1'
+        },
+        {
+          name: '新闻1'
+        },
+        {
+          name: '娱乐1'
+        }
+      ],
+      tabBarIndex: 0,
+      scrollInto: 'tab0',
+      swipers: [
+        {
+          src: '../../static/images/demo/demo4.jpg'
+        },
+        {
+          src: '../../static/images/demo/demo3.jpg'
+        }
+      ],
+      indexNav: [
+        {
+          src: '../../static/images/indexnav/1.png',
+          name: '新品分类'
+        },
+        {
+          src: '../../static/images/indexnav/2.gif',
+          name: '新品分类'
+        },
+        {
+          src: '../../static/images/indexnav/3.gif',
+          name: '新品分类'
+        },
+        {
+          src: '../../static/images/indexnav/4.gif',
+          name: '新品分类'
+        },
+        {
+          src: '../../static/images/indexnav/5.gif',
+          name: '新品分类'
+        }
+      ],
+      data: [
+        {
+          src: '/static/images/demo/demo1.jpg'
+        },
+        {
+          src: '/static/images/demo/demo2.jpg'
+        },
+        {
+          src: '/static/images/demo/demo3.jpg'
+        }
+      ],
+      oneAdv: {
+        title: '每日精选',
+        cover: '../../static/images/demo/demo4.jpg'
+      },
+      list: [
+        {
+          cover: '../../static/images/demo/list/1.jpg',
+          title: '米家空调',
+          desc: '1.5匹变频',
+          price1: '23322',
+          price2: '1199'
+        },
+        {
+          cover: '../../static/images/demo/list/1.jpg',
+          title: '米家空调',
+          desc: '1.5匹变频',
+          price1: '23322',
+          price2: '1199'
+        },
+        {
+          cover: '../../static/images/demo/list/1.jpg',
+          title: '米家空调',
+          desc: '1.5匹变频',
+          price1: '23322',
+          price2: '1199'
+        }
+      ]
+    };
+  },
+
+  methods: {
+    handleTabbarChange(index) {
+      this.tabBarIndex = index;
+    },
+    sliderChange(e) {
+     
+      this.tabBarIndex = e.index;
+    },
+    handleRefresh(e) {
+      console.log('下拉刷新', e);
+      this.refreshText = '正在刷新中...';
+      this.refreshing = true;
+      setTimeout(() => {
+        this.refreshing = false;
+        this.refreshText = '';
+      }, 1000);
+    },
+    onpullingdown(e) {
+      if (e.pullingDistance > e.viewHeight) {
+        this.refreshText = '释放就刷新';
+      } else {
+        this.refreshText = '下拉可以刷新';
+      }
+    },
+    onLoading() {
+      console.log('上拉加载2222');
+      this.loadingShow = 'show';
+      setTimeout(() => {
+        this.list = [
+          ...this.list,
+          {
+            cover: '../../static/images/demo/list/1.jpg',
+            title: '米家空调',
+            desc: '1.5匹变频',
+            price1: '23322',
+            price2: '1199'
+          },
+          {
+            cover: '../../static/images/demo/list/1.jpg',
+            title: '米家空调',
+            desc: '1.5匹变频',
+            price1: '23322',
+            price2: '1199'
+          },
+          {
+            cover: '../../static/images/demo/list/1.jpg',
+            title: '米家空调',
+            desc: '1.5匹变频',
+            price1: '23322',
+            price2: '1199'
+          }
+        ];
+        this.loadingShow = 'hide';
+      },1000);
+    }
+  }
+};
+</script>
+
+<style src="@/common/zcm-main-nvue.css"></style>
+<style></style>

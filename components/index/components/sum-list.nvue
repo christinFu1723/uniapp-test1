@@ -1,0 +1,39 @@
+<template>
+  <div class="row w-100">
+    <div
+      v-for="(item, index) in list"
+      :key="index"
+      class="col-6"
+      style="padding-left: 2.5px;padding-right: 2.5px;"
+    >
+      <image :src="item.cover" style="width: 370px;height: 370px;" />
+      <text class="font-md text-dark px-2">{{ item.title }}</text>
+      <text class="px-2 font text-light-muted" style="lines: 1;">{{ item.desc }}</text>
+      <div class="px-2 pt-1 row flex-nowrap ">
+        <price>{{ item.price1 }}</price>
+        <div class="row a-end">
+          <cancelPrice>{{ item.price2 }}</cancelPrice>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import price from '@/components/common/price.nvue';
+import cancelPrice from '@/components/common/cancel-price.nvue';
+export default {
+  components: {
+    price,
+    cancelPrice
+  },
+  props: {
+    list: {
+      type: Array,
+      default: () => []
+    }
+  }
+};
+</script>
+<style src="@/common/zcm-main-nvue.css"></style>
+<style></style>

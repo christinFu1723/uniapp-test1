@@ -1,0 +1,141 @@
+<template>
+  <div>
+    <!-- <div style="flex-direction: column;flex-wrap: wrap;">
+      <div style="height: 100px;width:375px;background: #007AFF;"></div>
+      <div
+        style="height: 100px;width:375px;background: #007AFF;margin: 100px 20px;border: 10px solid red"
+      ></div>
+    </div>
+
+    <div class="test-ctn">
+      <div class="item"></div>
+      <div class="item" style="margin: 100px 20px;border: 10px solid red"></div>
+    </div> -->
+
+    <list :loadmoreoffset="1" @loadmore="handleLoadMore">
+      <refresh
+        style="height: 80px;text-align: center;"
+        :display="refreshing ? 'show' : 'hide'"
+        @refresh="handleRefresh"
+        @pullingdown="onpullingdown"
+      >
+        <text>{{ refreshText }}</text>
+      </refresh>
+      <cell>
+        <div style="height: 1000px;border-width:2px;border-style: solid;" @click="handleOpen">
+          打开测试页面 vue修改nvue值：
+          <text>{{ testFont }}</text>
+        </div>
+      </cell>
+      <header style="height: 300px;background-color: yellow;">232323</header>
+      <cell v-for="(num, index) in lists" :key="index">
+        <div style="height: 1000px;border-width:2px;border-style: solid;" @click="handleTap">
+          <text>{{ num }}</text>
+        </div>
+      </cell>
+      <loading @loading="onLoading" :display="loadingShow">
+        <text style="display: flex;justify-content: center;width: 720px;">Loading...</text>
+      </loading>
+    </list>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      testFont: '',
+      refreshing: false,
+      refreshText: '下拉可以刷新',
+      lists: [1, 2, 3, 4],
+      loadingShow: 'hide'
+    };
+  },
+  beforeCreate() {
+    const info = getApp().globalData.info;
+    console.log(info);
+  },
+  created() {},
+  onNavigationBarButtonTap(e) {
+    console.log(e);
+  },
+  onNavigationBarSearchInputChanged(e){
+    console.log(e)
+  },
+  onNavigationBarSearchInputClicked(e){
+    console.log(e)
+  },
+  mounted() {
+    const that = this;
+    console.log('created');
+
+    uni.setStorage({
+      key: 'test',
+      data: '测试'
+    });
+    uni.$on('vue-modify', data => {
+      console.log('监听到了111', data.title);
+      that.testFont = data.title;
+      console.log('this.testFont', that.testFont);
+    });
+  },
+  beforeDestroy() {
+    console.log('删除');
+    uni.$off('vue-modify');
+  },
+  methods: {
+    handleRefresh(e) {
+      console.log('下拉刷新', e);
+      this.refreshText = '正在刷新中...';
+      this.refreshing = true;
+      setTimeout(() => {
+        this.refreshing = false;
+        this.refreshText = '';
+      }, 1000);
+    },
+    onpullingdown(e) {
+      if (e.pullingDistance > e.viewHeight) {
+        this.refreshText = '释放就刷新';
+      } else {
+        this.refreshText = '下拉可以刷新';
+      }
+    },
+    handleLoadMore() {
+      console.log('上拉加载，只会触发1-2次');
+    },
+    onLoading() {
+      console.log('上拉加载2222');
+      this.loadingShow = 'show';
+      setTimeout(() => {
+        this.lists = [...this.lists, 'a', 'b', 'c'];
+        this.loadingShow = 'hide';
+      });
+    },
+    handleTap() {
+      console.log('点击');
+      uni.$emit('nvue', { title: 'nvue事件传值' });
+    },
+    handleOpen() {
+      getApp().globalData.info = '全局信息修改';
+      uni.navigateTo({
+        url: '/pages/test/test',
+        fail: err => {
+          console.log(err);
+        }
+      });
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.test-ctn {
+  flex-direction: column;
+  flex-wrap: wrap;
+  .item {
+    height: 100px;
+    width: 375px;
+    background: #007aff;
+  }
+}
+</style>

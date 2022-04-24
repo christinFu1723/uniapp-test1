@@ -1,0 +1,75 @@
+<template>
+  <div class="w-100" style="height: 75px;">
+    <scroller
+      class="w-100 flex-row"
+      style="height: 75px;"
+      :show-scrollbar="false"
+      scroll-direction="horizontal"
+    >
+      <div
+        v-for="(item, index) in tabBar"
+        :key="index"
+        style="height: 75px;width: 120px"
+        class="a-center j-center"
+        @click="handleTap(index)"
+        :ref="`tab${index}`"
+      >
+        <text
+          style="height: 75px;line-height: 75px;border-style: solid;"
+          :style="{
+            color: tabBarIndex == index ? '#FD6801' : '#CCCCCC',
+            'border-color': tabBarIndex == index ? '#FD6801' : '#FFFFFF',
+            'border-bottom-width': tabBarIndex == index ? '2px' : '0px'
+          }"
+          class="font-md text-muted"
+        >{{ item.name }}
+        </text>
+      </div>
+    </scroller>
+  </div>
+</template>
+
+<script>
+const dom = weex.requireModule('dom');
+export default {
+  props: {
+    tabBar: {
+      type: Array,
+      default: () => []
+    },
+    tabBarIndex: {
+      type: Number | String,
+      default: () => 0
+    }
+  },
+  watch: {
+    tabBarIndex(newVal, oldVal) {
+      console.log('监听到变化',newVal)
+      this.handleTap(newVal);
+    }
+  },
+  methods: {
+    handleTap(index) {
+      this.$emit('change', index);
+      let el = this.$refs[`tab${index}`][0];
+      dom.getComponentRect(el, res => {
+        // 处于右边
+        if (res.size.right > 700) {
+          console.log('触发滑动');
+          // 拿到属于中间的节点
+          let newEl = this.$refs[`tab${index}`][0];
+          return dom.scrollToElement(newEl, {});
+        }
+        // 处于左边
+        if (res.size.left < 60) {
+          console.log('触发滑动');
+          let newEl = this.$refs[`tab${index - 1 >= 0 ? index - 1 : 0}`][0];
+          return dom.scrollToElement(newEl, {});
+        }
+      });
+    }
+  }
+};
+</script>
+<style src="@/common/zcm-main-nvue.css"></style>
+<style></style>

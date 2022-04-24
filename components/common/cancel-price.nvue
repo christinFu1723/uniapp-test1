@@ -1,0 +1,9 @@
+<template>
+  <text class="ml-1 line-through font text-light-muted" >￥<slot /></text>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style></style>
